@@ -8,6 +8,7 @@ describe("expand", function () {
   var objectEquality = function (a, b) {
     if (typeof a === "object" && typeof b === "object") {
       var n;
+
       for (n in a) {
         if (a[n] !== b[n]) {
           return false;
@@ -300,5 +301,10 @@ describe("expand", function () {
       a: 1,
       b: 2
     })).toEqual(["1", "2"]);
+
+    expect(expand({array: ["$a", "$b"], c: 3}, {
+      a: 1,
+      b: 2
+    })).toEqual({array: ["1", "2"], c: 3});
   });
 });

@@ -24,7 +24,7 @@ function isValue(obj) {
 
 function variables(val) {
   if(_.isArray(val)) {
-    return concat.apply([], _.map(val, variables));
+    return _.uniq(concat.apply([], _.map(val, variables)));
   }
 
   var match,

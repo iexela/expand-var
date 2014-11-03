@@ -250,10 +250,10 @@ describe("expand", function () {
   });
 
   it("special cases", function () {
-    expect(expand("$a$b", {
+    expect(expand("$a$b $a", {
       a: 1,
       b: 2
-    })).toEqual("12");
+    })).toEqual("12 1");
 
     expect(expand("${a}$b", {
       a: 1,
@@ -296,7 +296,7 @@ describe("expand", function () {
 
     expect(expand(["$a", "$b"])).toEqual(["$a", "$b"]);
 
-    expect(expand(["$a", "$a"], {
+    expect(expand(["$a", "$b"], {
       a: 1,
       b: 2
     })).toEqual(["1", "2"]);

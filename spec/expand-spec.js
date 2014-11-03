@@ -1,18 +1,20 @@
+"use strict";
+
 var expand = require("../index");
 
-describe("expand", function() {
+describe("expand", function () {
 
-  var objectEquality = function(a, b) {
-    if(typeof a === "object" && typeof b === "object") {
+  var objectEquality = function (a, b) {
+    if (typeof a === "object" && typeof b === "object") {
       var n;
-      for(n in a) {
-        if(a[n] !== b[n]) {
+      for (n in a) {
+        if (a[n] !== b[n]) {
           return false;
         }
       }
 
-      for(n in b) {
-        if(a[n] !== b[n]) {
+      for (n in b) {
+        if (a[n] !== b[n]) {
           return false;
         }
       }
@@ -23,16 +25,16 @@ describe("expand", function() {
     return undefined;
   };
 
-  beforeEach(function() {
+  beforeEach(function () {
     jasmine.addCustomEqualityTester(objectEquality);
   });
 
-  it("primitives", function() {
+  it("primitives", function () {
     expect(expand("abc")).toBe("abc");
     expect(expand(3)).toBe(3);
   });
 
-  it("names", function() {
+  it("names", function () {
     expect(expand("$abc", {
       abc: 1
     })).toBe("1");
@@ -47,9 +49,25 @@ describe("expand", function() {
       "abc-": 1,
       "abc-def": 2
     })).toBe("$abc-def");
+
+    expect(expand("${abc}", {
+      abc: 1
+    })).toBe("1");
+
+    expect(expand("${abc-}def", {
+      "abc": 1,
+      "abc-": 2,
+      "abc-def": 3
+    })).toBe("2def");
+
+    expect(expand("${abc-def}", {
+      "abc": 1,
+      "abc-": 2,
+      "abc-def": 3
+    })).toBe("3");
   });
 
-  it("string expansion", function() {
+  it("string expansion", function () {
     expect(expand("$a", {
       a: 1
     })).toBe("1");
@@ -70,7 +88,7 @@ describe("expand", function() {
     })).toBe("3 3");
   });
 
-  it("string not found expansion", function() {
+  it("string not found expansion", function () {
     expect(expand("$b", {
       b: ""
     })).toBe("");
@@ -84,7 +102,7 @@ describe("expand", function() {
     })).toBe("$b");
   });
 
-  it("string expansion with nested context", function() {
+  it("string expansion with nested context", function () {
     expect(expand("$a", {
       a: 1
     }, {
@@ -116,22 +134,22 @@ describe("expand", function() {
     })).toBe("5");
   });
 
-  it("cycle expansion", function() {
-    expect(function() {
+  it("cycle expansion", function () {
+    expect(function () {
       expand("$a", {
         a: "$b",
         b: "$a"
       });
     }).toThrow();
 
-    expect(function() {
+    expect(function () {
       expand({
         a: "$b",
         b: "$a"
       });
     }).toThrow();
 
-    expect(function() {
+    expect(function () {
       expand({
         a: "$c",
         b: "$a"
@@ -142,7 +160,7 @@ describe("expand", function() {
       });
     }).toThrow();
 
-    expect(function() {
+    expect(function () {
       expand({
         a: "$a"
       }, {
@@ -150,7 +168,7 @@ describe("expand", function() {
       });
     }).toThrow();
 
-    expect(function() {
+    expect(function () {
       expand({
         a: "$b $c"
       }, {
@@ -163,7 +181,7 @@ describe("expand", function() {
     }).toThrow();
   });
 
-  it("object expansion", function() {
+  it("object expansion", function () {
     expect(expand({
       a: 1,
       b: 2
@@ -196,7 +214,7 @@ describe("expand", function() {
     });
   });
 
-  it("object expansion with nested context", function() {
+  it("object expansion with nested context", function () {
     expect(expand({
       a: 1,
       b: 2
@@ -230,7 +248,7 @@ describe("expand", function() {
     });
   });
 
-  it("special cases", function() {
+  it("special cases", function () {
     expect(expand("$a$b", {
       a: 1,
       b: 2

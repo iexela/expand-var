@@ -1,3 +1,4 @@
+"use strict";
 
 var _ = require("underscore");
 
@@ -14,16 +15,16 @@ function isValue(obj) {
   return false;
 }
 
-function isContext(obj) {
-  return !isValue(obj);
-}
+//function isContext(obj) {
+//  return !isValue(obj);
+//}
 
 function variables(str) {
   var match,
       vars = [];
 
   while(true) {
-    match = VAR_REG_EXP.exec(str)
+    match = VAR_REG_EXP.exec(str);
     if(!match) {
       break;
     }
@@ -74,7 +75,7 @@ function Stack() {
 _.extend(Stack.prototype, {
   push: function(n) {
     if(this.calculating[n]) {
-      throw TypeError("Field '" + n + "' raises circular dependency");
+      throw new TypeError("Field '" + n + "' raises circular dependency");
     }
 
     this.data.push(n);
@@ -92,11 +93,6 @@ _.extend(Stack.prototype, {
     return this.data.length === 0;
   }
 });
-
-function expandValue(root, contexts) {
-  var context = expandContext(variables(root), contexts);
-  return resolve(root, context);
-}
 
 function expandContext(keys, contexts) {
   var raw = chain.apply(null, contexts),
@@ -126,11 +122,13 @@ function expandContext(keys, contexts) {
         stack.pop();
       }
       else {
+        /* jshint loopfunc:true */
         _.each(vars, function(v) {
           if(!hasInCache(v)) {
             stack.push(v);
           }
         });
+        /* jshint loopfunc:false */
       }
     }
 
@@ -138,6 +136,11 @@ function expandContext(keys, contexts) {
   });
 
   return context;
+}
+
+function expandValue(root, contexts) {
+  var context = expandContext(variables(root), contexts);
+  return resolve(root, context);
 }
 
 var expand = function(root) {

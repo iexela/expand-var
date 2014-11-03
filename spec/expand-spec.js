@@ -1,6 +1,7 @@
 "use strict";
 
-var expand = require("../index");
+var expand = require("../index"),
+    _ = require("underscore");
 
 describe("expand", function () {
 
@@ -288,5 +289,16 @@ describe("expand", function () {
       a: 1,
       b: 2
     })).toEqual("1$");
+  });
+
+  it("arrays", function() {
+    expect(expand([1, 2])).toEqual([1, 2]);
+
+    expect(expand(["$a", "$b"])).toEqual(["$a", "$b"]);
+
+    expect(expand(["$a", "$a"], {
+      a: 1,
+      b: 2
+    })).toEqual(["1", "2"]);
   });
 });

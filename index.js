@@ -1,5 +1,8 @@
 "use strict";
 
+var concat = Array.prototype.concat,
+    slice = Array.prototype.slice;
+
 var _ = require("underscore");
 
 var VAR_REG_EXP = /(\$\$)|(?:\$([a-zA-Z0-9_]+))|(?:\$\{([a-zA-Z0-9_\-]+)})/g;
@@ -19,12 +22,16 @@ function isValue(obj) {
 //  return !isValue(obj);
 //}
 
-function variables(str) {
+function variables(val) {
+  if(_.isArray(val)) {
+    return concat.apply([], _.map(val, variables));
+  }
+
   var match,
       vars = [];
 
   while(true) {
-    match = VAR_REG_EXP.exec(str);
+    match = VAR_REG_EXP.exec(val);
     if(!match) {
       break;
     }
@@ -35,12 +42,18 @@ function variables(str) {
   return vars;
 }
 
-function resolve(str, context) {
-  if(typeof str !== "string") {
-    return str;
+function resolve(val, context) {
+  if(_.isArray(val)) {
+    return _.map(val, function(valEl) {
+      return resolve(valEl, context);
+    });
   }
 
-  return str.replace(VAR_REG_EXP, function(match, case0, case1, case2/*, case3, offset*/) {
+  if(typeof val !== "string") {
+    return val;
+  }
+
+  return val.replace(VAR_REG_EXP, function(match, case0, case1, case2/*, case3, offset*/) {
     if(case0) {
       return "$";
     }
@@ -60,7 +73,7 @@ function resolve(str, context) {
 }
 
 function chain(/* contexts */) {
-  return _.reduce(Array.prototype.slice.call(arguments).reverse(), function(l, r) {
+  return _.reduce(slice.call(arguments).reverse(), function(l, r) {
     var Clazz = function() {};
     Clazz.prototype = l;
     return _.extend(new Clazz(), r);

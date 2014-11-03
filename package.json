@@ -1,0 +1,17 @@
+{
+  "name": "expand",
+  "version": "0.0.1",
+  "description": "Simple library to expand variables in the given context",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "keywords": [
+    "variable"
+  ],
+  "author": "iexela",
+  "license": "ISC",
+  "dependencies": {
+    "underscore": "^1.7.0"
+  }
+}

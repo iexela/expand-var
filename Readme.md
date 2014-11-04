@@ -37,7 +37,11 @@ This code will print
 ```
 
 Each variable should be preceded by a symbol `$`. In the example above there are two variables `$src` and `$root`. They both are resolved in the provided context. `$root` is resolved to `my-project` and `src` to `my-project/src`. Consequently the source string is resolved to `my-project/src/js/**`.
+
+**Note.** Variables also can be specified in curly braces, like `${src}`
+
 **Note.** Variables are case-sensitive. Names `src`, `Src` and `SRC` are different.
+
 **Note.** This library is not for path expansion. There are another libraries which fulfil this task very good.
 
 Behavior of this module is very similar to variable expansion you might use in shell scripts. You can use this module like:
@@ -69,7 +73,8 @@ prints
 Variables is resolved starting from the leftmost context to the right. Example above shows that `$root` was found in the leftmost context and `$src` in the right.
 
 One more example:
-Find the path to favourite directory. If FAVOURITE environment variable is not defined use predefined:
+
+Find the path to favourite directory. If `FAVOURITE` environment variable is not defined use predefined:
 
 ```js
 expand("My favourite directory is $FAVOURITE", process.env, {
@@ -172,7 +177,18 @@ console.log(result);
 
 prints
 
-```
+```js
 > { js: 'my-project/src/**/js/**',
 >   css: { dir1: '$src/css/dir1', dir2: '$src/css/dir2' } }
+```
+
+### Cycle references
+
+Cycle references are not allowed. Following code raises error.
+
+```js
+expand({
+  a: "$b",
+  b: "$a"
+});
 ```

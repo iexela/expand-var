@@ -1,5 +1,5 @@
 {
-  "name": "expand-var",
+  "name": "expand",
   "version": "0.0.1",
   "description": "Simple library to expand variables in the given context",
   "main": "index.js",

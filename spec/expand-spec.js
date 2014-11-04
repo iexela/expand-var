@@ -1,5 +1,3 @@
-/* global jasmine, describe, beforeEach, it, expect */
-
 "use strict";
 
 var expand = require("../index"),

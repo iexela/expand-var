@@ -122,16 +122,9 @@ console.log(result);
 prints
 
 ```js
-> var result = expand({
->   js: "$src/js/**",
->   css: "$src/css/**",
->   res: ["$src/css/img", "$other"]
-> }, {
->   root: "my-project",
->   src: "$root/src",
->   other: "$root/other"
-> });
-console.log(result);
+> { js: 'my-project/src/js/**',
+>   css: 'my-project/src/css/**',
+>   res: [ 'my-project/src/css/img', 'my-project/other' ] }
 ```
 
 ## Restrictions

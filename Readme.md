@@ -38,17 +38,17 @@ This code will print
 
 Each variable should be preceded by a symbol `$`. In the example above there are two variables `$src` and `$root`. They both are resolved in the provided context. `$root` is resolved to `my-project` and `src` to `my-project/src`. Consequently the source string is resolved to `my-project/src/js/**`.
 
-**Note.** Variables also can be specified in curly braces, like `${src}`
-
-**Note.** Variables are case-sensitive. Names `src`, `Src` and `SRC` are different.
-
-**Note.** This library is not for path expansion. There are another libraries which fulfil this task very good.
-
 Behavior of this module is very similar to variable expansion you might use in shell scripts. You can use this module like:
 
 ```js
 expand("My home directory is $HOME", process.env);
 ```
+
+**Note.** Variables also can be specified in curly braces, like `${src}`
+
+**Note.** Variables are case-sensitive. Names `src`, `Src` and `SRC` are different.
+
+**Note.** This library is not for path expansion. There are another libraries which fulfil this task very good.
 
 ### Several contexts
 

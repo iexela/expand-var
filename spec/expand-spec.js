@@ -1,3 +1,5 @@
+/* global jasmine, describe, beforeEach, it, expect */
+
 "use strict";
 
 var expand = require("../index"),
@@ -5,23 +7,37 @@ var expand = require("../index"),
 
 describe("expand", function () {
 
+  var valueEquality = function(a, b) {
+    if(typeof a === "object" ^ typeof b === "object") {
+      return false;
+    }
+    else if(typeof a === "object") {
+      if(_.isArray(a) ^ _.isArray(b)) {
+        return false;
+      }
+      return objectEquality(a, b);
+    }
+    else {
+      return a === b;
+    }
+  };
+
   var objectEquality = function (a, b) {
     if (typeof a === "object" && typeof b === "object") {
-      var n;
-
-      for (n in a) {
-        if (a[n] !== b[n]) {
-          return false;
-        }
+      return _.every(a, function(v, k) {
+        return valueEquality(v, b[k]);
+      }) && _.every(b, function(v, k) {
+        return valueEquality(v, a[k]);
+      });
+    }
+    else if(_.isArray(a) && _.isArray(b)) {
+      if(a.length === b.length) {
+        return _.every(a, function(v, i) {
+          return valueEquality(v, b[i]);
+        });
       }
 
-      for (n in b) {
-        if (a[n] !== b[n]) {
-          return false;
-        }
-      }
-
-      return true;
+      return false;
     }
 
     return undefined;

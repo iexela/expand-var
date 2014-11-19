@@ -189,14 +189,3 @@ expand.all = makeExpand(function(root) {
 });
 
 module.exports = expand;
-
-var result = expand.all({
-  js: "$src/js/**",
-  css: "$src/css/**",
-  res: ["$src/css/img", "$other"]
-}, {
-  root: "my-project",
-  src: "$root/src",
-  other: "$root/other"
-});
-console.log(result);

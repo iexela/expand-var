@@ -181,10 +181,22 @@ expand.all = makeExpand(function(root) {
     return variables(root);
   }
   else {
-    return _.reduce(arguments, function(ctx, all) {
-      return push.apply(all, _.keys(ctx));
+    return _.reduce(arguments, function(all, ctx) {
+      push.apply(all, _.keys(ctx));
+      return all;
     }, {});
   }
 });
 
 module.exports = expand;
+
+var result = expand.all({
+  js: "$src/js/**",
+  css: "$src/css/**",
+  res: ["$src/css/img", "$other"]
+}, {
+  root: "my-project",
+  src: "$root/src",
+  other: "$root/other"
+});
+console.log(result);

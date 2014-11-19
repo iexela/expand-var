@@ -1,6 +1,6 @@
 {
   "name": "expand-var",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple library to expand variables in the given context",
   "main": "index.js",
   "repository": {

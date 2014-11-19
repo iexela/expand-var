@@ -330,9 +330,12 @@ describe("expand", function () {
     }, {
       a: 1,
       b: 2
+    }, {
+      d: "abc"
     })).toEqual({
-      a: 5,
-      b: 5
+      a: "5",
+      b: 5,
+      d: "abc"
     });
   });
 });

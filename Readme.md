@@ -127,6 +127,34 @@ prints
 >   res: [ 'my-project/src/css/img', 'my-project/other' ] }
 ```
 
+### Expand properties in all contexts
+
+`expand.all` function is used to expand properties in all contexts rather than only in the first:
+
+```js
+var result = expand.all({
+  js: "$src/js/**",
+  css: "$src/css/**",
+  res: ["$src/css/img", "$other"]
+}, {
+  root: "my-project",
+  src: "$root/src",
+  other: "$root/other"
+});
+console.log(result);
+```
+
+prints
+
+```js
+> { js: 'my-project/src/js/**',
+>   css: 'my-project/src/css/**',
+>   res: [ 'my-project/src/css/img', 'my-project/other' ],
+>   root: 'my-project',
+>   src: 'my-project/src',
+>   other: 'my-project/other' }
+```
+
 ## Restrictions
 
 ### Nested objects

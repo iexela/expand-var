@@ -321,4 +321,18 @@ describe("expand", function () {
       b: 2
     })).toEqual({array: ["1", "2"], c: 3});
   });
+
+  it("all", function() {
+    expect(expand.all({
+      b: 5
+    }, {
+      a: "$b"
+    }, {
+      a: 1,
+      b: 2
+    })).toEqual({
+      a: 5,
+      b: 5
+    });
+  });
 });

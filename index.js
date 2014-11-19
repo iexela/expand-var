@@ -1,6 +1,7 @@
 "use strict";
 
-var concat = Array.prototype.concat,
+var push = Array.prototype.push,
+    concat = Array.prototype.concat,
     slice = Array.prototype.slice;
 
 var _ = require("underscore");
@@ -151,22 +152,39 @@ function expandContext(keys, contexts) {
   return context;
 }
 
-function expandValue(root, contexts) {
-  var context = expandContext(variables(root), contexts);
-  return resolve(root, context);
-}
+var makeExpand = function(keyExtractor) {
+  return function(root) {
+    if (arguments.length === 0) {
+      return undefined;
+    }
 
-var expand = function(root) {
-  if(arguments.length === 0) {
-    return undefined;
-  }
+    if (isValue(root)) {
+      return resolve(root, expandContext(keyExtractor.apply(null, arguments), arguments));
+    }
+    else {
+      return expandContext(keyExtractor.apply(null, arguments), arguments);
+    }
+  };
+};
 
+var expand = makeExpand(function(root) {
   if(isValue(root)) {
-    return expandValue(root, _.rest(arguments));
+    return variables(root);
   }
   else {
-    return expandContext(_.keys(root), arguments);
+    return _.keys(root);
   }
-};
+});
+
+expand.all = makeExpand(function(root) {
+  if(isValue(root)) {
+    return variables(root);
+  }
+  else {
+    return _.reduce(arguments, function(ctx, all) {
+      return push.apply(all, _.keys(ctx));
+    }, {});
+  }
+});
 
 module.exports = expand;

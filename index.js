@@ -186,6 +186,16 @@ expand.all = makeExpand(function(root) {
       return all;
     }, {});
   }
-});
+})
+
+expand.defer = function() {
+  var base = _.toArray(arguments);
+
+  return function(root) {
+    var contexts = _.toArray(arguments);
+    push.apply(contexts, base);
+    return expand.apply(null, contexts);
+  };
+};
 
 module.exports = expand;

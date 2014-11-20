@@ -338,4 +338,32 @@ describe("expand", function () {
       d: "abc"
     });
   });
+
+  it("defer", function() {
+    var d = expand.defer({
+      a: "1",
+      b: 5,
+      c: 7
+    });
+
+    expect(d("$b")).toBe("5");
+
+    expect(d({
+      p: "$b",
+      k: "$a"
+    })).toEqual({
+      p: "5",
+      k: "1"
+    });
+
+    expect(d({
+      p: "$b",
+      k: "$a"
+    }, {
+      b: 3
+    })).toEqual({
+      p: "3",
+      k: "1"
+    });
+  });
 });

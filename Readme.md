@@ -155,6 +155,34 @@ prints
 >   other: 'my-project/other' }
 ```
 
+### Defer evaluation
+
+With `expand.defer` and `expand.deferAll` you can defer evaluation of `expand` and `expand.all` functions.
+When you call one of `defer` functions you get a new one function which allows to calculate value or object
+in the context passed in `defer` function. Look at the following example:
+
+```js
+var project = expand.defer({
+  root: "my-project",
+  src: "$root/src"
+});
+```
+
+Now `project` is a function which behaves like expand function implicitly having contexts defined in `defer` call.
+
+```js
+console.log(project("$src/js/**"));
+> my-project/src/js/**
+
+console.log(project({
+  js: "$src/js/**",
+  css: "$src/css/**"
+}));
+> { js: 'my-project/src/js/**', css: 'my-project/src/css/**' }
+```
+
+You can pass several contexts in `defer` function also as in the new function
+
 ## Restrictions
 
 ### Nested objects

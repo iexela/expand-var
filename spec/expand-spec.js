@@ -322,7 +322,7 @@ describe("expand", function () {
     })).toEqual({array: ["1", "2"], c: 3});
   });
 
-  it("all", function() {
+  it("expand.all", function() {
     expect(expand.all({
       b: 5
     }, {
@@ -364,6 +364,40 @@ describe("expand", function () {
     })).toEqual({
       p: "3",
       k: "1"
+    });
+  });
+
+  it("deferAll", function() {
+    var d = expand.deferAll({
+      a: "1",
+      b: 5,
+      c: 7
+    });
+
+    expect(d("$b")).toBe("5");
+
+    expect(d({
+      p: "$b",
+      k: "$a"
+    })).toEqual({
+      p: "5",
+      k: "1",
+      a: "1",
+      b: 5,
+      c: 7
+    });
+
+    expect(d({
+      p: "$b",
+      k: "$a"
+    }, {
+      b: 3
+    })).toEqual({
+      p: "3",
+      k: "1",
+      a: "1",
+      b: 3,
+      c: 7
     });
   });
 });

@@ -152,7 +152,7 @@ function expandContext(keys, contexts) {
   return context;
 }
 
-var makeExpand = function(keyExtractor) {
+function makeExpand(keyExtractor) {
   return function(root) {
     if (arguments.length === 0) {
       return undefined;
@@ -166,6 +166,18 @@ var makeExpand = function(keyExtractor) {
     }
   };
 };
+
+function makeDefer(expand) {
+  return function() {
+    var base = _.toArray(arguments);
+
+    return function(root) {
+      var contexts = _.toArray(arguments);
+      push.apply(contexts, base);
+      return expand.apply(null, contexts);
+    };
+  };
+}
 
 var expand = makeExpand(function(root) {
   if(isValue(root)) {
@@ -188,14 +200,7 @@ expand.all = makeExpand(function(root) {
   }
 })
 
-expand.defer = function() {
-  var base = _.toArray(arguments);
-
-  return function(root) {
-    var contexts = _.toArray(arguments);
-    push.apply(contexts, base);
-    return expand.apply(null, contexts);
-  };
-};
+expand.defer = makeDefer(expand);
+expand.deferAll = makeDefer(expand.all);
 
 module.exports = expand;
